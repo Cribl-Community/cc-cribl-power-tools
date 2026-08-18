@@ -1,0 +1,63 @@
+# Product API access declaration. Declare Cribl product API paths this app needs.
+# At install time, admins see exactly which platform resources the app will use.
+#
+# Workflow 1 (Cribl Search datasets) is called in the default_search group context
+# (/m/:gid/search/...). Per the platform guide, group-context calls are authorized
+# against the /m/:gid equivalent path, so we declare those here.
+#
+# Workflow 2 (Cribl Lake datasets) is called against the Lake product endpoints.
+
+policies:
+  # --- Cribl Search datasets (Workflow 1) ---
+  - object: '/m/:gid/search/datasets'
+    actions: ['GET']
+  - object: '/m/:gid/search/datasets/*'
+    # GET (get one + read ACL/teams), PATCH (update breakerRulesets),
+    # POST (apply user + team ACL changes)
+    actions: ['GET', 'PATCH', 'POST']
+  # Event Breaker rulesets (the values of a dataset's breakerRulesets field),
+  # read in the search group context to populate the datatype-ruleset picker.
+  - object: '/m/:gid/lib/breakers'
+    actions: ['GET']
+
+  # --- Users & teams (share-permission pickers, Workflow 1) ---
+  # /system/* endpoints are non-contextual and declared without a group prefix.
+  # On Cribl.Cloud the user list comes from the Search product Members endpoint
+  # (/products/search/users); /system/users is the on-prem fallback.
+  - object: '/products/search/users'
+    actions: ['GET']
+  - object: '/system/users'
+    actions: ['GET']
+  - object: '/system/teams'
+    actions: ['GET']
+
+  # --- Cribl Lake datasets (Workflow 2) ---
+  - object: '/products/lake/lakes/*'
+    # GET (list datasets + storage locations), POST (create datasets)
+    actions: ['GET', 'POST']
+
+  # --- Paired Lake Destinations (Workflow 2, optional) ---
+  # List Stream worker groups to target, and deploy a group after creating
+  # destinations. GET /master/groups (list) + PATCH /master/groups/:id/deploy.
+  - object: '/master/groups'
+    actions: ['GET']
+  - object: '/master/groups/*'
+    actions: ['GET', 'PATCH'] # Required for the matching :id/deploy child path
+  # Destinations (Outputs) and Git commit are called in a worker-group context
+  # (/m/:gid/...). GET (list existing outputs), POST (create the cribl_lake
+  # Destination), and POST /m/:gid/version/commit (commit before deploy).
+  - object: '/m/:gid/system/outputs'
+    actions: ['GET', 'POST']
+  - object: '/m/:gid/version/commit'
+    actions: ['POST']
+
+  # --- Pack copy across workspaces (Workflow 3) ---
+  # SOURCE side only (the current workspace). Packs are per-worker-group, so they are
+  # read in a group context: GET /m/:gid/packs (list) and GET /m/:gid/packs/:id/export.
+  # The DESTINATION side lives in other workspaces and is reached via the external
+  # management-plane + Leader hosts declared in config/proxies.yml (not here). The
+  # app-scoped KV store used for credentials is granted automatically and not declared.
+  - object: '/m/:gid/packs'
+    actions: ['GET']
+  - object: '/m/:gid/packs/*'
+    actions: ['GET'] # Required for the matching :id/export child path
