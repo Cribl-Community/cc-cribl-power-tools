@@ -17,6 +17,9 @@ build
 static
 default
 
+# Local-only Claude Code guidance — must NOT ship to the customer-facing repo
+CLAUDE.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
