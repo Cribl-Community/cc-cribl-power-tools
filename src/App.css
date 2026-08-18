@@ -199,41 +199,308 @@ body {
 
 .app {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
   min-height: 100vh;
   background-color: token('color.background.application');
   color: token('color.foreground.default');
 }
 
-.app-header {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: token('spacing.md');
-  padding: token('spacing.lg') token('spacing.xl') token('spacing.md');
-}
-
-.app-header-titles {
+.app-body {
+  flex: 1;
+  min-width: 0; /* allow tables/content to shrink instead of overflowing the row */
   display: flex;
   flex-direction: column;
-  gap: token('spacing.xs');
-}
-
-.theme-select {
-  display: inline-flex;
-  align-items: center;
-  gap: token('spacing.sm');
-  flex-shrink: 0;
 }
 
 .app-main {
+  flex: 1;
   padding: token('spacing.lg') token('spacing.xl') token('spacing.2xl');
 }
 
-/* Align the tab bar with the content (filter bar) instead of the window edge. */
-.app-tabs {
-  padding: 0 token('spacing.xl');
+/* Per-dashboard heading + usage description, above each workflow. */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+  margin-bottom: token('spacing.lg');
+  padding-bottom: token('spacing.md');
+  border-bottom: token('border.default');
+}
+
+.dashboard-header-desc {
+  max-width: 82ch;
+}
+
+/* ============================================================================
+   Persistent left navigation rail (Sidebar.tsx). Themed entirely through the
+   shared design tokens so it re-skins with every theme. Collapses to an
+   icon-only rail on desktop and becomes an off-canvas drawer on narrow screens.
+   ============================================================================ */
+
+.sidebar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: token('color.background.surface');
+  border-right: token('border.default');
+  transition: width 160ms ease;
+}
+
+.sidebar-collapsed {
+  width: 60px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  min-height: 57px;
+  padding: token('spacing.md') token('spacing.md');
+  border-bottom: token('border.default');
+}
+
+.sidebar-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  font-size: 18px;
+  color: token('color.foreground.accent.default');
+}
+
+.sidebar-brand-title {
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.lg');
+  padding: token('spacing.md') token('spacing.sm');
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-group-label {
+  padding: 0 token('spacing.sm') token('spacing.xs');
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: token('color.foreground.subtle');
+}
+
+.sidebar-group-sep {
+  height: 1px;
+  margin: token('spacing.xs') token('spacing.sm');
+  background-color: token('color.border.neutral.default');
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  width: 100%;
+  padding: token('spacing.sm');
+  border: 1px solid transparent;
+  border-radius: token('radius.md');
+  background: none;
+  color: token('color.foreground.default');
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.sidebar-item:hover {
+  background-color: token('color.background.neutral.subtle');
+}
+
+.sidebar-item:focus-visible {
+  outline: none;
+  border-color: token('color.border.focus');
+  box-shadow: 0 0 0 1px token('color.border.focus');
+}
+
+.sidebar-item-active,
+.sidebar-item-active:hover {
+  background-color: token('color.background.accent.subtle');
+  color: token('color.foreground.accent.default');
+  font-weight: 600;
+}
+
+.sidebar-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  font-size: 16px;
+}
+
+.sidebar-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-collapsed .sidebar-item {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+  padding: token('spacing.sm');
+  border-top: token('border.default');
+}
+
+.sidebar-theme {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+  padding: 0 token('spacing.xs');
+}
+
+.sidebar-theme-label {
+  font-size: 12px;
+  color: token('color.foreground.subtle');
+}
+
+.sidebar-theme .native-select {
+  width: 100%;
+}
+
+/* Shared small icon/text button (collapse toggle, mobile controls). */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: token('spacing.sm');
+  min-height: 32px;
+  padding: token('spacing.xs') token('spacing.sm');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+  color: token('color.foreground.default');
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.icon-btn:hover {
+  background-color: token('color.background.neutral.subtle');
+}
+
+.icon-btn:focus-visible {
+  outline: none;
+  border-color: token('color.border.focus');
+  box-shadow: 0 0 0 1px token('color.border.focus');
+}
+
+/* The narrow-viewport top bar and the drawer's close button are hidden until a
+   media query reveals them. */
+.mobile-topbar,
+.sidebar-backdrop,
+.sidebar-mobile-close {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  /* Sidebar becomes an off-canvas drawer, sliding in from the left. */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    transform: translateX(-100%);
+    transition: transform 180ms ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .sidebar-mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Ignore the collapsed rail in drawer mode — always show full labels. */
+  .sidebar-collapsed {
+    width: 250px;
+  }
+
+  .sidebar-collapsed .sidebar-item {
+    justify-content: flex-start;
+    padding-left: token('spacing.sm');
+    padding-right: token('spacing.sm');
+  }
+
+  .sidebar-collapse-btn {
+    display: none;
+  }
+
+  .sidebar-mobile-close {
+    display: inline-flex;
+    margin-left: auto;
+    border: none;
+    background: none;
+    padding: token('spacing.xs');
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: token('spacing.sm');
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 15;
+    height: 52px;
+    padding: token('spacing.sm') token('spacing.md');
+    background-color: token('color.background.surface');
+    border-bottom: token('border.default');
+  }
+
+  /* Clear the fixed top bar so content is never crushed under it. */
+  .app-body {
+    padding-top: 52px;
+  }
+
+  .app-main {
+    padding: token('spacing.md') token('spacing.md') token('spacing.2xl');
+  }
 }
 
 /* --- generic workflow layout --- */
@@ -666,6 +933,100 @@ body {
   margin: token('spacing.sm') 0 token('spacing.sm') token('spacing.lg');
 }
 
+/* --- config import wizard --- */
+
+.wizard-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: token('spacing.sm');
+}
+
+.wizard-step {
+  display: inline-flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  padding: token('spacing.xs') token('spacing.md');
+  border: token('border.default');
+  border-radius: token('radius.full');
+  color: token('color.foreground.subtle');
+  font-size: 13px;
+}
+
+.wizard-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: token('radius.full');
+  background-color: token('color.background.neutral.default');
+  color: token('color.foreground.subtle');
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wizard-step-active {
+  border-color: token('color.border.accent.default');
+  color: token('color.foreground.default');
+}
+
+.wizard-step-active .wizard-step-num {
+  background-color: token('color.background.accent.solid.default');
+  color: token('color.foreground.accent.contrast');
+}
+
+.wizard-step-done .wizard-step-num {
+  background-color: token('color.background.success.subtle');
+  color: token('color.foreground.success.default');
+}
+
+/* --- drag-and-drop upload zone --- */
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: token('spacing.xs');
+  padding: token('spacing.2xl') token('spacing.lg');
+  border: 2px dashed token('color.border.neutral.strong');
+  border-radius: token('radius.md');
+  background-color: token('color.background.neutral.subtle');
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible {
+  border-color: token('color.border.accent.default');
+  outline: none;
+}
+
+.dropzone-active {
+  border-color: token('color.border.accent.default');
+  background-color: token('color.background.accent.subtle');
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: token('spacing.md');
+  padding: token('spacing.xs') token('spacing.sm');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+}
+
 /* ============================================================================
    Super Mario theme — bright NES-era palette (sky blue, coin gold, Mario red,
    pipe green) with thick black outlines and hard pixel-block shadows. Overrides
@@ -736,24 +1097,29 @@ body {
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* HUD-style header band so all header text stays legible over the sky. */
-.theme-mario .app-header {
-  background-color: rgba(255, 253, 245, 0.92);
+/* HUD-style brand band so the sidebar title stays legible over the theme. */
+.theme-mario .sidebar-brand {
+  background-color: var(--dm-panel-2);
   border-bottom: 3px solid var(--dm-border);
 }
 
 /* Playful title treatment with a mushroom + star and a soft outline shadow. */
-.theme-mario .app-header-titles h1 {
+.theme-mario .sidebar-brand-title {
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
   letter-spacing: 0.5px;
 }
 
-.theme-mario .app-header-titles h1::before {
+.theme-mario .sidebar-brand-title::before {
   content: '🍄 ';
 }
 
-.theme-mario .app-header-titles h1::after {
+.theme-mario .sidebar-brand-title::after {
   content: ' ⭐';
+}
+
+/* Chunky pixel-block edge on the whole rail. */
+.theme-mario .sidebar {
+  border-right: 3px solid var(--dm-border);
 }
 
 /* Progress bar reads like a power-up meter. */
@@ -822,29 +1188,34 @@ body {
     linear-gradient(180deg, #0d0a09 0%, #120c0a 100%);
 }
 
-/* Metal HUD header band with a blood-red underline. */
-.theme-doom .app-header {
+/* Metal HUD brand band with a blood-red underline, and a red-lit rail edge. */
+.theme-doom .sidebar-brand {
   background-color: rgba(10, 7, 6, 0.85);
   border-bottom: 2px solid var(--dm-accent);
   box-shadow: 0 2px 12px rgba(217, 38, 38, 0.25);
 }
 
+.theme-doom .sidebar {
+  border-right: 2px solid var(--dm-accent);
+  box-shadow: 2px 0 14px rgba(217, 38, 38, 0.18);
+}
+
 /* Stamped, blood-red, all-caps title with a skull on each side and a red glow. */
-.theme-doom .app-header-titles h1 {
+.theme-doom .sidebar-brand-title {
   color: #ff3b30;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   font-weight: 800;
   text-shadow:
     0 0 8px rgba(217, 38, 38, 0.55),
     2px 2px 0 rgba(0, 0, 0, 0.6);
 }
 
-.theme-doom .app-header-titles h1::before {
+.theme-doom .sidebar-brand-title::before {
   content: '💀 ';
 }
 
-.theme-doom .app-header-titles h1::after {
+.theme-doom .sidebar-brand-title::after {
   content: ' 💀';
 }
 

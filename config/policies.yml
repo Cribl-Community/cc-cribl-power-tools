@@ -61,3 +61,21 @@ policies:
     actions: ['GET']
   - object: '/m/:gid/packs/*'
     actions: ['GET'] # Required for the matching :id/export child path
+
+  # --- Bulk pipeline assignment (Workflow 4) & bulk config import (Workflow 5) ---
+  # Both run in a worker-group context (/m/:gid/...). Pipeline assignment lists
+  # Sources/Destinations/Pipelines and PATCHes the pre-/post-processing Pipeline on
+  # each Source/Destination. Config import lists existing configs (collision check)
+  # and POSTs new Pipelines/Sources/Destinations. Changes are committed (and
+  # optionally deployed) via the /version/commit + /master/groups/:id/deploy paths
+  # already declared above.
+  - object: '/m/:gid/pipelines'
+    actions: ['GET', 'POST'] # list (assign options + collisions), create (import)
+  - object: '/m/:gid/system/inputs'
+    actions: ['GET', 'POST'] # list Sources, create Sources (import)
+  - object: '/m/:gid/system/inputs/*'
+    actions: ['PATCH'] # assign the pre-processing Pipeline on a Source
+  # /m/:gid/system/outputs GET+POST is already declared above (Lake destinations);
+  # add PATCH on the :id child for assigning the post-processing Pipeline.
+  - object: '/m/:gid/system/outputs/*'
+    actions: ['PATCH']

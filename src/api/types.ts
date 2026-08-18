@@ -161,6 +161,43 @@ export interface GitCommitSummary {
   [key: string]: unknown;
 }
 
+// --- Stream config resources (pipeline assignment + bulk config import) ---
+
+/**
+ * A Stream Pipeline (Pipeline). The schema requires `id` and a `conf` object; other
+ * fields are preserved via the index signature so imports round-trip losslessly.
+ */
+export interface Pipeline {
+  id: string;
+  conf?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+/**
+ * A Stream Source (Input). The pre-processing Pipeline is the top-level `pipeline`
+ * field (a Pipeline id). Every other field is preserved via the index signature so a
+ * full-object PATCH never drops unrelated configuration.
+ */
+export interface StreamInput {
+  id: string;
+  type?: string;
+  /** Pre-processing Pipeline id applied to this Source before routing. */
+  pipeline?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * A Stream Destination (Output). The post-processing Pipeline is the top-level
+ * `pipeline` field (a Pipeline id). Other fields are preserved for lossless PATCH.
+ */
+export interface StreamOutput {
+  id: string;
+  type?: string;
+  /** Post-processing Pipeline id applied before sending events to this Destination. */
+  pipeline?: string;
+  [key: string]: unknown;
+}
+
 // --- Packs & cross-workspace copy (Workflow 3) ---
 
 /**
