@@ -1,0 +1,877 @@
+/* ============================================================================
+   Dark "aged terminal" theme — warm sepia undertones.
+   One palette, remapped onto Capra's semantic --cds2-* tokens so both the
+   design-system components and this app's custom CSS share the same colors.
+   Scoped to :root/.dark/.light and loaded after Capra CSS so it always wins.
+   ============================================================================ */
+:root,
+.dark,
+.light {
+  /* Palette */
+  --dm-bg: #1a1714;
+  --dm-panel: #242019;
+  --dm-panel-2: #2b261e;
+  --dm-hover: #2e2921;
+  --dm-border: #3a342a;
+  --dm-border-strong: #4a4235;
+  --dm-text: #e8e0d1;
+  --dm-text-muted: #a89e8c;
+  --dm-accent: #d4a24e;
+  --dm-accent-hover: #c28f3d;
+  --dm-accent-active: #b07f34;
+  --dm-accent-subtle: #322a1b;
+  --dm-on-accent: #1a1714;
+  --dm-success: #8faf7e;
+  --dm-success-subtle: #232a20;
+  --dm-danger: #c47a6d;
+  --dm-danger-solid: #b5675a;
+  --dm-danger-subtle: #2c1f1b;
+  --dm-danger-border: #5f4038;
+  --dm-warning: #d4a24e;
+  --dm-warning-subtle: #2c2418;
+  --dm-warning-border: #5c4a2a;
+
+  color-scheme: dark;
+
+  /* Typography — clean sans for UI; keep Capra's mono for code/IDs */
+  --cds2-core-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* Slightly rounded corners (4–6px) */
+  --cds2-radius-md: 5px;
+  --cds2-radius-lg: 6px;
+  --cds2-radius-xl: 8px;
+
+  /* Composite borders */
+  --cds2-border-default: 1px solid var(--dm-border);
+  --cds2-border-focus: 2px solid var(--dm-accent);
+
+  /* Backgrounds */
+  --cds2-color-background-application: var(--dm-bg);
+  --cds2-color-background-surface: var(--dm-panel);
+  --cds2-color-background-panel-solid: var(--dm-panel);
+  --cds2-color-background-panel-translucent: var(--dm-panel);
+  --cds2-color-background-neutral-default: var(--dm-panel-2);
+  --cds2-color-background-neutral-subtle: var(--dm-hover);
+  --cds2-color-background-neutral-hover: var(--dm-hover);
+  --cds2-color-background-neutral-selected: var(--dm-border);
+  --cds2-color-background-disabled: var(--dm-panel-2);
+
+  /* Text */
+  --cds2-color-foreground-default: var(--dm-text);
+  --cds2-color-foreground-subtle: var(--dm-text-muted);
+  --cds2-color-foreground-neutral-default: var(--dm-text);
+  --cds2-color-foreground-neutral-strong: var(--dm-text);
+  --cds2-color-foreground-placeholder: var(--dm-text-muted);
+  --cds2-color-foreground-link: var(--dm-accent);
+
+  /* Borders */
+  --cds2-color-border-neutral-default: var(--dm-border);
+  --cds2-color-border-neutral-subtle: var(--dm-border);
+  --cds2-color-border-neutral-strong: var(--dm-border-strong);
+  --cds2-color-border-focus: var(--dm-accent);
+
+  /* Accent (amber/bronze) — semantic + raw scale for full coverage */
+  --cds2-color-background-accent-solid-default: var(--dm-accent);
+  --cds2-color-background-accent-solid-hover: var(--dm-accent-hover);
+  --cds2-color-background-accent-solid-active: var(--dm-accent-active);
+  --cds2-color-background-accent-subtle: var(--dm-accent-subtle);
+  --cds2-color-foreground-accent-default: var(--dm-accent);
+  --cds2-color-foreground-accent-strong: #e6c07f;
+  --cds2-color-foreground-accent-contrast: var(--dm-on-accent);
+  --cds2-color-border-accent-default: var(--dm-accent);
+  --cds2-color-accent-2: var(--dm-accent-subtle);
+  --cds2-color-accent-8: var(--dm-accent);
+  --cds2-color-accent-9: var(--dm-accent);
+  --cds2-color-accent-10: var(--dm-accent-hover);
+  --cds2-color-accent-11: var(--dm-accent);
+  --cds2-color-accent-12: #e6c07f;
+  --cds2-color-accent-contrast: var(--dm-on-accent);
+
+  /* Neutral scale (raw) */
+  --cds2-color-neutral-1: var(--dm-bg);
+  --cds2-color-neutral-2: var(--dm-panel);
+  --cds2-color-neutral-3: var(--dm-panel-2);
+  --cds2-color-neutral-4: var(--dm-hover);
+  --cds2-color-neutral-5: var(--dm-border);
+  --cds2-color-neutral-6: var(--dm-border);
+  --cds2-color-neutral-7: var(--dm-border);
+  --cds2-color-neutral-8: var(--dm-border-strong);
+  --cds2-color-neutral-11: var(--dm-text-muted);
+  --cds2-color-neutral-12: var(--dm-text);
+
+  /* Success — muted sage */
+  --cds2-color-foreground-success-default: var(--dm-success);
+  --cds2-color-foreground-success-strong: var(--dm-success);
+  --cds2-color-background-success-subtle: var(--dm-success-subtle);
+  --cds2-color-background-success-surface: var(--dm-success-subtle);
+  --cds2-color-border-success-default: #4a5a3f;
+
+  /* Danger — dusty red */
+  --cds2-color-foreground-danger-default: var(--dm-danger);
+  --cds2-color-foreground-danger-strong: var(--dm-danger);
+  --cds2-color-background-danger-subtle: var(--dm-danger-subtle);
+  --cds2-color-background-danger-surface: var(--dm-danger-subtle);
+  --cds2-color-background-danger-solid-default: var(--dm-danger-solid);
+  --cds2-color-background-danger-solid-hover: #a15a4e;
+  --cds2-color-border-danger-default: var(--dm-danger-border);
+  --cds2-color-foreground-danger-contrast: var(--dm-on-accent);
+  --cds2-color-danger-contrast: var(--dm-on-accent);
+
+  /* Warning — amber */
+  --cds2-color-foreground-warning-default: var(--dm-warning);
+  --cds2-color-foreground-warning-strong: var(--dm-warning);
+  --cds2-color-background-warning-subtle: var(--dm-warning-subtle);
+  --cds2-color-background-warning-surface: var(--dm-warning-subtle);
+  --cds2-color-border-warning-default: var(--dm-warning-border);
+
+  /* Info — neutralized to warm (no blue anywhere) */
+  --cds2-color-foreground-info-default: var(--dm-text-muted);
+  --cds2-color-background-info-subtle: var(--dm-panel-2);
+  --cds2-color-background-info-surface: var(--dm-panel-2);
+  --cds2-color-border-info-default: var(--dm-border);
+  --cds2-color-background-info-solid-default: var(--dm-accent);
+}
+
+/* ============================================================================
+   Capra theme — the clean, on-brand, standards-adherent look. No decorative
+   overrides, no emoji, no component-internal selectors: it only re-points the
+   same --dm-* palette + the handful of hard-coded --cds2-* remaps onto a light,
+   accessible design-system palette (indigo accent, neutral grays, WCAG-AA text
+   contrast). Placed after :root so it wins the cascade when <html> carries
+   .theme-capra, and everything downstream keeps flowing through design tokens.
+   ============================================================================ */
+.theme-capra {
+  /* Palette — light neutral surfaces, indigo accent, semantic status colors */
+  --dm-bg: #f6f7f9; /* application background */
+  --dm-panel: #ffffff; /* surfaces / cards */
+  --dm-panel-2: #eef1f5; /* neutral default */
+  --dm-hover: #e7ebf0;
+  --dm-border: #d6dbe2;
+  --dm-border-strong: #b7bfc9;
+  --dm-text: #16191f; /* ~15:1 on white */
+  --dm-text-muted: #5a616c; /* ~5.9:1 on white (AA) */
+  --dm-accent: #4f46e5; /* indigo-600 */
+  --dm-accent-hover: #4338ca;
+  --dm-accent-active: #3730a3;
+  --dm-accent-subtle: #eceafe;
+  --dm-on-accent: #ffffff;
+  --dm-success: #157347; /* green, AA on white and on subtle */
+  --dm-success-subtle: #e6f4ec;
+  --dm-danger: #c62828;
+  --dm-danger-solid: #dc2626;
+  --dm-danger-subtle: #fceceb;
+  --dm-danger-border: #f0b4b1;
+  --dm-warning: #a15c07; /* amber, legible on light surfaces */
+  --dm-warning-subtle: #fbf0d9;
+  --dm-warning-border: #ecd08f;
+
+  color-scheme: light;
+
+  /* Clean, neutral UI type; Capra's mono is kept for code/IDs */
+  --cds2-core-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* Standard, gently rounded corners */
+  --cds2-radius-md: 6px;
+  --cds2-radius-lg: 8px;
+  --cds2-radius-xl: 12px;
+  --cds2-border-default: 1px solid var(--dm-border);
+  --cds2-border-focus: 2px solid var(--dm-accent);
+
+  /* Re-point the hard-coded accent/status remaps from the default theme */
+  --cds2-color-foreground-accent-strong: #3730a3;
+  --cds2-color-accent-12: #3730a3;
+  --cds2-color-background-danger-solid-hover: #b91c1c;
+  --cds2-color-border-success-default: #b8dcc7;
+}
+
+html,
+body {
+  background-color: var(--dm-bg);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: token('color.background.application');
+  color: token('color.foreground.default');
+}
+
+.app-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: token('spacing.md');
+  padding: token('spacing.lg') token('spacing.xl') token('spacing.md');
+}
+
+.app-header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+.theme-select {
+  display: inline-flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  flex-shrink: 0;
+}
+
+.app-main {
+  padding: token('spacing.lg') token('spacing.xl') token('spacing.2xl');
+}
+
+/* Align the tab bar with the content (filter bar) instead of the window edge. */
+.app-tabs {
+  padding: 0 token('spacing.xl');
+}
+
+/* --- generic workflow layout --- */
+
+.wf-section {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.lg');
+}
+
+.wf-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+}
+
+.wf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.md');
+  flex-wrap: wrap;
+}
+
+.wf-toolbar-spacer {
+  flex: 1;
+}
+
+.wf-selectbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: token('spacing.md');
+  flex-wrap: wrap;
+}
+
+.wf-selectbar-actions {
+  display: flex;
+  gap: token('spacing.sm');
+}
+
+.wf-actions {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.md');
+  flex-wrap: wrap;
+}
+
+.wf-actions-between {
+  justify-content: space-between;
+}
+
+.wf-empty {
+  padding: token('spacing.xl');
+  text-align: center;
+}
+
+/* --- data table --- */
+
+.table-scroll {
+  overflow-x: auto;
+  border: token('border.default');
+  border-radius: token('radius.md');
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 10px token('spacing.md');
+  border-bottom: token('border.default');
+  vertical-align: top;
+}
+
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: token('color.background.neutral.default');
+  color: token('color.foreground.subtle');
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  transition: background-color 150ms ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: token('color.background.neutral.subtle');
+}
+
+.data-table tr.row-selected {
+  background-color: token('color.background.accent.subtle');
+}
+
+.data-table tr.row-invalid {
+  background-color: token('color.background.danger.subtle');
+}
+
+.col-check,
+.col-status {
+  width: 36px;
+  text-align: center;
+}
+
+.th-sort {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+}
+
+.th-sort:hover {
+  color: token('color.foreground.default');
+}
+
+.muted {
+  color: token('color.foreground.subtle');
+}
+
+.mono {
+  font-family: var(--cds2-core-font-family-mono);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: token('spacing.xs');
+}
+
+/* --- edit panel --- */
+
+.edit-panel {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.md');
+  padding: token('spacing.lg');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+}
+
+.edit-block {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+  padding-top: token('spacing.md');
+  border-top: token('border.default');
+}
+
+.edit-body {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+  padding-left: token('spacing.xl');
+}
+
+.grant-row {
+  display: flex;
+  gap: token('spacing.sm');
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* --- switch --- */
+
+.switch-row {
+  display: inline-flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  cursor: pointer;
+}
+
+.switch-text {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- native inputs styled to match --- */
+
+.native-select,
+.native-input {
+  font: inherit;
+  padding: 6px 8px;
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+  color: token('color.foreground.default');
+  min-height: 32px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.native-input {
+  min-width: 160px;
+}
+
+.native-select:focus,
+.native-input:focus,
+.names-textarea:focus {
+  outline: none;
+  border-color: token('color.border.focus');
+  box-shadow: 0 0 0 1px token('color.border.focus');
+}
+
+.native-input::placeholder,
+.names-textarea::placeholder {
+  color: token('color.foreground.placeholder');
+}
+
+.names-textarea {
+  font-family: inherit;
+  font-size: 13px;
+  width: 100%;
+  padding: token('spacing.md');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+  color: token('color.foreground.default');
+  resize: vertical;
+}
+
+/* --- lake form --- */
+
+.lake-form,
+.lake-names {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+  padding: token('spacing.lg');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: token('spacing.md');
+  margin-top: token('spacing.sm');
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+/* --- ordered list editor --- */
+
+.ole {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+}
+
+.ole-add {
+  display: flex;
+  gap: token('spacing.sm');
+  align-items: center;
+}
+
+.ole-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+.ole-item {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  padding: token('spacing.xs') token('spacing.sm');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+}
+
+.ole-item-actions {
+  display: flex;
+  gap: token('spacing.xs');
+  margin-left: auto;
+}
+
+/* --- progress --- */
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+  max-width: 520px;
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-track {
+  height: 8px;
+  border-radius: token('radius.full');
+  background-color: token('color.background.neutral.default');
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: token('color.background.accent.solid.default');
+  transition: width 120ms ease;
+}
+
+/* --- results --- */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.md');
+}
+
+.results-counts {
+  display: flex;
+  gap: token('spacing.sm');
+  flex-wrap: wrap;
+}
+
+.status-ok {
+  color: token('color.foreground.success.default');
+  display: inline-flex;
+}
+
+.status-fail {
+  color: token('color.foreground.danger.default');
+  display: inline-flex;
+}
+
+/* --- preview --- */
+
+.preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.md');
+}
+
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.sm');
+  padding: token('spacing.md');
+  border: token('border.default');
+  border-radius: token('radius.md');
+  background-color: token('color.background.surface');
+}
+
+.preview-field {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+.diff-row {
+  display: flex;
+  align-items: flex-start;
+  gap: token('spacing.md');
+}
+
+.diff-side {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+  flex: 1;
+}
+
+.diff-arrow {
+  color: token('color.foreground.subtle');
+  padding-top: 18px;
+}
+
+.diff-chip {
+  font-family: var(--cds2-core-font-family-mono);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: token('radius.md');
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.diff-chip-current {
+  color: var(--dm-text-muted);
+  border-color: var(--dm-border);
+}
+
+.diff-chip-new {
+  color: var(--dm-accent);
+  border-color: var(--dm-accent);
+}
+
+.share-diff {
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
+}
+
+.mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.mini-table th,
+.mini-table td {
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: token('border.default');
+}
+
+.confirm-list {
+  margin: token('spacing.sm') 0 token('spacing.sm') token('spacing.lg');
+}
+
+/* ============================================================================
+   Super Mario theme — bright NES-era palette (sky blue, coin gold, Mario red,
+   pipe green) with thick black outlines and hard pixel-block shadows. Overrides
+   the same --dm-* palette + a few hard-coded --cds2 remaps, so every Capra
+   component and custom element re-skins from here. Placed after the default
+   block so it wins the cascade when <html> carries .theme-mario.
+   ============================================================================ */
+.theme-mario {
+  /* Palette */
+  --dm-bg: #5c94fc; /* overworld sky */
+  --dm-panel: #fffdf5; /* cloud white */
+  --dm-panel-2: #ffe29a; /* ? block gold */
+  --dm-hover: #fff2c4;
+  --dm-border: #000000; /* sprite outline */
+  --dm-border-strong: #000000;
+  --dm-text: #201a12;
+  --dm-text-muted: #6b5a34;
+  --dm-accent: #e52521; /* Mario red */
+  --dm-accent-hover: #c81f1b;
+  --dm-accent-active: #a81a17;
+  --dm-accent-subtle: #ffdedc;
+  --dm-on-accent: #ffffff;
+  --dm-success: #1f8a2f; /* pipe green */
+  --dm-success-subtle: #ddf6df;
+  --dm-danger: #c41a12;
+  --dm-danger-solid: #e52521;
+  --dm-danger-subtle: #ffdedc;
+  --dm-danger-border: #000000;
+  --dm-warning: #b57400; /* dark coin gold (legible on white) */
+  --dm-warning-subtle: #fff3c9;
+  --dm-warning-border: #000000;
+
+  color-scheme: light;
+
+  /* Rounder, friendlier UI type; keep mono for IDs/errors */
+  --cds2-core-font-family-sans: 'Trebuchet MS', 'Verdana', system-ui, -apple-system,
+    sans-serif;
+
+  /* Slightly blocky corners + thick black outlines */
+  --cds2-radius-md: 3px;
+  --cds2-radius-lg: 4px;
+  --cds2-radius-xl: 6px;
+  --cds2-border-default: 2px solid var(--dm-border);
+  --cds2-border-focus: 3px solid var(--dm-accent);
+
+  /* Re-point the hard-coded accent/status remaps from the default theme */
+  --cds2-color-foreground-accent-strong: #a81a17;
+  --cds2-color-accent-12: #a81a17;
+  --cds2-color-background-danger-solid-hover: #c81f1b;
+  --cds2-color-border-success-default: #000000;
+}
+
+/* Hard "pixel block" drop shadow (no blur) on the major surfaces. */
+.theme-mario .edit-panel,
+.theme-mario .lake-form,
+.theme-mario .lake-names,
+.theme-mario .preview-card,
+.theme-mario .table-scroll,
+.theme-mario .ole-item {
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.28);
+}
+
+/* Chunky, outlined form controls. */
+.theme-mario .native-select,
+.theme-mario .native-input,
+.theme-mario .names-textarea {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* HUD-style header band so all header text stays legible over the sky. */
+.theme-mario .app-header {
+  background-color: rgba(255, 253, 245, 0.92);
+  border-bottom: 3px solid var(--dm-border);
+}
+
+/* Playful title treatment with a mushroom + star and a soft outline shadow. */
+.theme-mario .app-header-titles h1 {
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+}
+
+.theme-mario .app-header-titles h1::before {
+  content: '🍄 ';
+}
+
+.theme-mario .app-header-titles h1::after {
+  content: ' ⭐';
+}
+
+/* Progress bar reads like a power-up meter. */
+.theme-mario .progress-track {
+  border: 2px solid var(--dm-border);
+}
+
+/* ============================================================================
+   DOOM theme — a gritty UAC-on-Mars / hell aesthetic: near-black gunmetal
+   surfaces, blood-red accents, hazard-amber warnings, and toxic "nukage" green
+   for success. Sharp corners, heavy dark borders, and menacing red glows on the
+   major surfaces. Overrides the same --dm-* palette + a few --cds2 remaps, so
+   every Capra component re-skins from here. Placed last so it wins the cascade
+   when <html> carries .theme-doom.
+   ============================================================================ */
+.theme-doom {
+  /* Palette */
+  --dm-bg: #0d0a09; /* scorched near-black */
+  --dm-panel: #171210; /* gunmetal */
+  --dm-panel-2: #221915;
+  --dm-hover: #2b1f19;
+  --dm-border: #3d2823; /* rusted steel */
+  --dm-border-strong: #5e352b;
+  --dm-text: #e6d8ce; /* bone / ash */
+  --dm-text-muted: #9c877b;
+  --dm-accent: #d92626; /* blood red */
+  --dm-accent-hover: #b81f1f;
+  --dm-accent-active: #9a1919;
+  --dm-accent-subtle: #2a1210;
+  --dm-on-accent: #fbeee9;
+  --dm-success: #7ec850; /* nukage green */
+  --dm-success-subtle: #16210d;
+  --dm-danger: #ef5a2f; /* hazard orange-red */
+  --dm-danger-solid: #d92626;
+  --dm-danger-subtle: #2a1310;
+  --dm-danger-border: #5e2a1f;
+  --dm-warning: #e8912a; /* hazard amber */
+  --dm-warning-subtle: #2a1d0c;
+  --dm-warning-border: #5e3f1a;
+
+  color-scheme: dark;
+
+  /* Heavy, condensed, industrial type for the UI; keep mono for IDs/errors */
+  --cds2-core-font-family-sans: 'Oswald', 'Franklin Gothic Bold', 'Arial Narrow',
+    system-ui, -apple-system, sans-serif;
+
+  /* Sharp, hard-edged corners + heavy dark borders */
+  --cds2-radius-md: 1px;
+  --cds2-radius-lg: 2px;
+  --cds2-radius-xl: 2px;
+  --cds2-border-default: 1px solid var(--dm-border);
+  --cds2-border-focus: 2px solid var(--dm-accent);
+
+  /* Re-point the hard-coded accent/status remaps from the default theme */
+  --cds2-color-foreground-accent-strong: #ff4d4d;
+  --cds2-color-accent-12: #ff4d4d;
+  --cds2-color-background-danger-solid-hover: #b81f1f;
+  --cds2-color-border-success-default: #3c5a26;
+}
+
+/* Hellish gradient wash behind the app — dark, with an ember glow up from the
+   bottom so surfaces read as lit from a fire below. */
+.theme-doom .app {
+  background-image:
+    radial-gradient(120% 80% at 50% 120%, rgba(217, 38, 38, 0.16), transparent 60%),
+    linear-gradient(180deg, #0d0a09 0%, #120c0a 100%);
+}
+
+/* Metal HUD header band with a blood-red underline. */
+.theme-doom .app-header {
+  background-color: rgba(10, 7, 6, 0.85);
+  border-bottom: 2px solid var(--dm-accent);
+  box-shadow: 0 2px 12px rgba(217, 38, 38, 0.25);
+}
+
+/* Stamped, blood-red, all-caps title with a skull on each side and a red glow. */
+.theme-doom .app-header-titles h1 {
+  color: #ff3b30;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 800;
+  text-shadow:
+    0 0 8px rgba(217, 38, 38, 0.55),
+    2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+.theme-doom .app-header-titles h1::before {
+  content: '💀 ';
+}
+
+.theme-doom .app-header-titles h1::after {
+  content: ' 💀';
+}
+
+/* Menacing red-edged glow + hard shadow on the major surfaces. */
+.theme-doom .edit-panel,
+.theme-doom .lake-form,
+.theme-doom .lake-names,
+.theme-doom .preview-card,
+.theme-doom .table-scroll,
+.theme-doom .ole-item {
+  box-shadow:
+    0 0 0 1px rgba(217, 38, 38, 0.12),
+    0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+/* Sticky table header reads like a targeting console — red rule under it. */
+.theme-doom .data-table thead th {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--dm-accent);
+}
+
+/* Progress bar reads like a health/armor meter with an ember glow. */
+.theme-doom .progress-track {
+  border: 1px solid var(--dm-border-strong);
+}
+
+.theme-doom .progress-fill {
+  box-shadow: 0 0 8px rgba(217, 38, 38, 0.7);
+}
