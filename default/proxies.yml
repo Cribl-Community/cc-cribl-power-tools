@@ -1,0 +1,54 @@
+# External API declaration. Declare domains your app needs to reach.
+# At install time, admins see exactly which endpoints the app will use.
+#
+# Workflow 3 (Pack copy across workspaces) reaches the Cribl.Cloud management plane
+# and other workspaces' Leaders. The hosts are Cribl.Cloud endpoints:
+#
+#   - login.cribl.cloud    OAuth token exchange (client-credentials grant). The Client
+#                          ID/Secret travel in the request BODY, so no header injection
+#                          is needed (and none is configured) for this host.
+#   - gateway.cribl.cloud  Management plane — lists the organization's workspaces.
+#   - <workspace leaders>  Each destination workspace's Leader API (<leaderFQDN>/api/v1):
+#                          list packs, upload/install a pack, commit, deploy.
+#
+# IMPORTANT: the app proxy matches domain keys EXACTLY — wildcard/subdomain keys such as
+# `*.cribl.cloud` or `.cribl.cloud` are NOT honored. Every destination workspace must be
+# declared as its own entry. Those FQDNs are dynamic per organization, so they live in the
+# generated block at the bottom of this file: run `npm run proxies:gen` to (re)write it,
+# then `npm run package` and reinstall. See the README ("Declaring destination workspaces").
+#
+# The platform strips any Authorization header the app sets, so the org Bearer token is
+# injected here from the app KV store (key `packCopyToken`, written by credentials.ts).
+# The current-workspace API (CRIBL_API_URL) is auto-proxied by the platform and is not
+# affected by the entries below.
+
+login.cribl.cloud:
+  paths:
+    allowlist:
+      - /oauth/token
+  headers:
+    allowlist:
+      - content-type
+      - accept
+
+gateway.cribl.cloud:
+  paths:
+    allowlist:
+      - /v1/organizations/
+  headers:
+    inject:
+      Authorization: "'Bearer ' + kv.packCopyToken"
+    allowlist:
+      - content-type
+      - accept
+
+# >>> BEGIN generated workspace leaders (managed by `npm run proxies:gen`) >>>
+# This block is EMPTY until you run the generator. Until then, no destination workspace
+# can be reached and the Pack Copy workflow will report a "not declared" error.
+#
+# Fill it in by running (from the project folder):
+#   npm run proxies:gen -- --org <organizationId>
+# then `npm run package` and reinstall the app. The generator replaces everything between
+# these two markers with one entry per workspace Leader FQDN. You can also add entries by
+# hand. See the README section "Declaring destination workspaces (required setup)".
+# <<< END generated workspace leaders <<<
