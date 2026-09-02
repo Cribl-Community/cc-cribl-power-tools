@@ -13,9 +13,9 @@
 #
 # IMPORTANT: the app proxy matches domain keys EXACTLY — wildcard/subdomain keys such as
 # `*.cribl.cloud` or `.cribl.cloud` are NOT honored. Every destination workspace must be
-# declared as its own entry. Those FQDNs are dynamic per organization, so they live in the
-# generated block at the bottom of this file: run `npm run proxies:gen` to (re)write it,
-# then `npm run package` and reinstall. See the README ("Declaring destination workspaces").
+# declared as its own entry, keyed by its Leader FQDN. An app admin can add these hosts
+# post-install, without repackaging, via App Settings → External API Access. Add one entry
+# per workspace using the block shape below. See the README ("Enabling destination workspaces").
 #
 # The platform strips any Authorization header the app sets, so the org Bearer token is
 # injected here from the app KV store (key `packCopyToken`, written by credentials.ts).
@@ -43,12 +43,24 @@ gateway.cribl.cloud:
       - accept
 
 # >>> BEGIN generated workspace leaders (managed by `npm run proxies:gen`) >>>
-# This block is EMPTY until you run the generator. Until then, no destination workspace
-# can be reached and the Pack Copy workflow will report a "not declared" error.
+# Add one entry per destination workspace, keyed by its Leader FQDN. The placeholder
+# below shows the exact shape — REPLACE the hostname (the first line) with your org's
+# workspace Leader FQDN, e.g. `main-<workspace>-<organizationId>.cribl.cloud`. To enable
+# more workspaces, copy the whole block and change only the hostname. Keep everything
+# under it as-is (the Authorization injection is required — the org Bearer token comes
+# from the KV key `packCopyToken`).
 #
-# Fill it in by running (from the project folder):
-#   npm run proxies:gen -- --org <organizationId>
-# then `npm run package` and reinstall the app. The generator replaces everything between
-# these two markers with one entry per workspace Leader FQDN. You can also add entries by
-# hand. See the README section "Declaring destination workspaces (required setup)".
+# The recommended way is in-app: App Settings → External API Access (no repackage needed).
+# See the README section "Enabling destination workspaces".
+
+REPLACE-WITH-YOUR-WORKSPACE-LEADER.cribl.cloud:
+  paths:
+    allowlist:
+      - /api/v1/
+  headers:
+    inject:
+      Authorization: "'Bearer ' + kv.packCopyToken"
+    allowlist:
+      - content-type
+      - accept
 # <<< END generated workspace leaders <<<

@@ -62,47 +62,49 @@ function toMessage(err: unknown): string {
 const PROXY_NOT_DECLARED = /not declared in proxies\.yml/i;
 
 /**
- * Persistent, up-front notice that Pack Copy is inert until the app has been built with the
- * destination workspaces declared in proxies.yml. Shown on the credential gate and at the top
- * of the form so users learn the requirement before investing time in the workflow.
+ * Persistent, up-front notice that Pack Copy is inert until an app admin has enabled the
+ * destination workspaces' Leader hosts in App Settings → External API Access. Shown on the
+ * credential gate and at the top of the form so users learn the requirement before investing
+ * time in the workflow.
  */
 function RequiredSetupNotice() {
   return (
-    <Alert appearance="info" title="Required setup — this workflow won't work until the app is built for your org">
+    <Alert appearance="info" title="One-time setup — enable your destination workspaces">
       <Text variant="body-sm-normal">
-        Copying packs to another workspace only works after an app admin has run the one-time build
-        steps: generate the destination-workspace list, repackage, and reinstall the app. Until
-        that's done, no destination workspaces will load below and copies will fail.
+        Copying packs to another workspace only works once an app admin has allowed that
+        workspace's Leader host in <span className="mono">App Settings → External API Access</span>.
+        The platform proxy can only reach hosts listed there, and it matches them exactly —
+        wildcards aren't supported — so each destination workspace is listed by its own Leader host.
       </Text>
       <Text variant="body-sm-normal">
-        Run <span className="mono">{'npm run proxies:gen -- --org <organizationId>'}</span>, then{' '}
-        <span className="mono">npm run package</span> and reinstall the app. Full step-by-step
-        instructions are in the README under “Declaring destination workspaces (required setup)”.
+        No rebuild or reinstall is needed — the config is edited in place. If a destination
+        workspace's worker groups don't load below, add its Leader host and reload. Full
+        instructions are in the README under “Enabling destination workspaces”.
       </Text>
     </Alert>
   );
 }
 
 /**
- * Shown when a destination workspace's Leader host isn't in proxies.yml. Domain keys are
- * matched exactly (wildcards aren't supported), so each workspace must be declared at
- * build time. This tells the user what an app admin has to do to enable the workspace.
+ * Shown when a destination workspace's Leader host isn't allowed in External API Access. Hosts
+ * are matched exactly (wildcards aren't supported), so each workspace must be listed by its
+ * Leader FQDN. This tells the user what an app admin has to do to enable the workspace — an
+ * in-place edit, no repackaging.
  */
 function DomainNotDeclaredHelp({ fqdn }: { fqdn?: string }) {
   return (
-    <Alert appearance="danger" title="This workspace isn't enabled for the current build">
+    <Alert appearance="danger" title="This workspace isn't enabled yet">
       <Text variant="body-sm-normal">
-        The app can only reach workspace hosts that are declared in its{' '}
-        <span className="mono">proxies.yml</span> at build time — wildcards aren't supported — so
-        this workspace's Leader{fqdn ? ' ' : ''}
+        The app can only reach workspace hosts allowed in{' '}
+        <span className="mono">App Settings → External API Access</span>, and they're matched
+        exactly (no wildcards) — so this workspace's Leader{fqdn ? ' ' : ''}
         {fqdn ? <span className="mono">{fqdn}</span> : null} can't be reached yet.
       </Text>
       <Text variant="body-sm-normal">
-        An app admin needs to add it and reinstall: run{' '}
-        <span className="mono">{'npm run proxies:gen -- --org <organizationId>'}</span> to declare
-        every workspace in the org (or add this one host by hand), then{' '}
-        <span className="mono">npm run package</span> and reinstall the app. See the README section
-        “Declaring destination workspaces”.
+        An app admin can enable it without repackaging: open{' '}
+        <span className="mono">App Settings → External API Access</span> and add an entry for{' '}
+        {fqdn ? <span className="mono">{fqdn}</span> : 'this Leader host'}, then reload this page.
+        See the README section “Enabling destination workspaces” for the exact block to add.
       </Text>
     </Alert>
   );
@@ -862,9 +864,9 @@ export function PackCopy() {
         </Text>
         <Text variant="body-sm-normal" color="subtle">
           Another workspace in your organization (the current one is excluded). Each destination
-          workspace must be declared in the app's <span className="mono">proxies.yml</span> at build
-          time (wildcards aren't supported) — if a workspace's worker groups don't load, an app admin
-          needs to add it via <span className="mono">npm run proxies:gen</span> and reinstall. See the
+          workspace must be enabled in <span className="mono">App Settings → External API Access</span>{' '}
+          (hosts are matched exactly — wildcards aren't supported). If a workspace's worker groups
+          don't load, an app admin needs to add its Leader host there — no rebuild required. See the
           README.
         </Text>
         {wsState === 'loading' && (
