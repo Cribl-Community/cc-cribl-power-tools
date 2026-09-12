@@ -6,6 +6,7 @@ import { LakeBulkCreate } from './workflows/LakeBulkCreate';
 import { PackCopy } from './workflows/PackCopy';
 import { PipelineAssign } from './workflows/PipelineAssign';
 import { ConfigImport } from './workflows/ConfigImport';
+import { FunctionFinder } from './workflows/FunctionFinder';
 
 type ThemeKey = 'capra' | 'terminal' | 'mario' | 'doom';
 
@@ -32,6 +33,11 @@ const DASHBOARDS: Record<NavKey, { title: string; description: string }> = {
     title: 'Pack copy — across workspaces',
     description:
       'Copy packs from a worker group in this workspace into worker groups in other Cribl workspaces. Choose the source worker group and the packs to copy, add the destination workspace and its API credentials, then run the copy. Destination workspaces must be declared at build time; commit (and optionally deploy) the target group when finished.',
+  },
+  functions: {
+    title: 'Functions — finder',
+    description:
+      'Search every function configured in every pipeline across all worker groups, and see exactly where each one lives. Matches against the function type (e.g. sampling, eval, mask) and its description — plain substring by default, or a regular expression when you toggle Regex. Each result shows the worker group, pipeline, position, and whether the function is currently enabled or disabled. Toggle “Enabled only” to answer questions like “which pipelines have sampling active right now?”. This is a read-only tool — it never changes any pipeline or function.',
   },
   assign: {
     title: 'Pipelines — bulk assign',
@@ -101,6 +107,8 @@ function App() {
             <PackCopy />
           ) : tab === 'assign' ? (
             <PipelineAssign />
+          ) : tab === 'functions' ? (
+            <FunctionFinder />
           ) : (
             <ConfigImport />
           )}

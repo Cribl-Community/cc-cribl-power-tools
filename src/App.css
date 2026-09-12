@@ -539,7 +539,29 @@ body {
 
 .wf-selectbar-actions {
   display: flex;
+  align-items: center;
   gap: token('spacing.sm');
+}
+
+/* Sort picker: "Sort by" label and its select sit inline on one row. */
+.wf-sort {
+  display: flex;
+  align-items: center;
+  gap: token('spacing.sm');
+  white-space: nowrap;
+}
+
+.wf-sort .native-select {
+  width: auto;
+}
+
+/* Compact list of per-group enumeration warnings inside an Alert. */
+.wf-warning-list {
+  margin: token('spacing.xs') 0 token('spacing.sm');
+  padding-left: token('spacing.lg');
+  display: flex;
+  flex-direction: column;
+  gap: token('spacing.xs');
 }
 
 .wf-actions {

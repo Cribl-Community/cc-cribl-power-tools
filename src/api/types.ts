@@ -164,12 +164,44 @@ export interface GitCommitSummary {
 // --- Stream config resources (pipeline assignment + bulk config import) ---
 
 /**
+ * A single Function configured inside a Pipeline (PipelineFunctionConf). `id` is the
+ * function's TYPE identifier (e.g. `eval`, `sampling`, `mask`) — Cribl has no separate
+ * display name, so the type id doubles as the name. `description` is an optional,
+ * user-provided label/comment. `disabled: true` means the function is turned off in the
+ * pipeline (so "enabled" === `!disabled`). Other fields are preserved via the index
+ * signature. Read-only here; the Function Finder never mutates these.
+ */
+export interface PipelineFunction {
+  /** Function type/name, e.g. `eval`, `sampling`, `mask`. */
+  id: string;
+  /** Optional user-provided description/label for this function instance. */
+  description?: string;
+  /** When true, the function is disabled (events skip it). Absent/false === enabled. */
+  disabled?: boolean;
+  /** JavaScript filter expression that selects which events pass through the function. */
+  filter?: string;
+  /** When true, stop passing events to downstream functions after this one runs. */
+  final?: boolean;
+  [key: string]: unknown;
+}
+
+/**
+ * The `conf` block of a Pipeline. Only the `functions` array is modeled explicitly
+ * (that is what the Function Finder reads); other fields are preserved via the index
+ * signature so imports/round-trips stay lossless.
+ */
+export interface PipelineConf {
+  functions?: PipelineFunction[];
+  [key: string]: unknown;
+}
+
+/**
  * A Stream Pipeline (Pipeline). The schema requires `id` and a `conf` object; other
  * fields are preserved via the index signature so imports round-trip losslessly.
  */
 export interface Pipeline {
   id: string;
-  conf?: Record<string, unknown>;
+  conf?: PipelineConf;
   [key: string]: unknown;
 }
 
